@@ -6,6 +6,7 @@
 import os
 import re
 import json
+from unidecode import unidecode
 
 
 class EmailReplyParser(object):
@@ -33,7 +34,7 @@ class EmailReplyParser(object):
 
             Returns reply body message
         """
-        return self.read(text).reply
+        return self.read(text.replace('\xa0', ' ')).reply
 
 
 class EmailMessage(object):
@@ -62,7 +63,7 @@ class EmailMessage(object):
             '|' + self.words_map[self.language]['Sent'] +
             '|' + self.words_map[self.language]['To'] +
             '|' + self.words_map[self.language]['Subject'] +
-            '):\*? .+|.+(mailto:).+'
+            ')\s*:\*? .+|.+(mailto:).+'
         )
 
     def nl_support(self):
@@ -80,7 +81,8 @@ class EmailMessage(object):
     def fr_support(self):
         self.SIG_REGEX = re.compile(
             r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] \
-            + '(\w+\s*){1,3})|(.*[Cc]ordialement)'
+            + '(\w+\s*){1,3})|(.*cordialement)',
+            re.IGNORECASE
         )
         self.QUOTE_HDR_REGEX = re.compile('Am.*schrieb.*>:$')
         self.default_quoted_header()
