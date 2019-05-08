@@ -20,6 +20,7 @@ setup(
         'email_reply_parser': ['../VERSION'],
         '': ['./languages_support.json']
     },
+    install_requires=['unidecode'],
     author='Royce Haynes',
     author_email='royce.haynes@gmail.com',
     url='https://github.com/zapier/email-reply-parser',
